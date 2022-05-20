@@ -18,10 +18,10 @@ t = 3
 async def startMe(message: types.message):
     try:
 
-        imgbut = KeyboardButton("/img ваше сообщение")
+        imgbut = KeyboardButton("/img your message")
         menu = ReplyKeyboardMarkup(resize_keyboard=True).add(imgbut)
 
-        await bot.send_message(message.chat.id, "Привет! Я бот модератор! (кстати если ввести /img то получишь изображение на тему того что написал после /img)", reply_markup=menu)
+        await bot.send_message(message.chat.id, "Hello! Im moderator ( enter /img cat) )", reply_markup=menu)
 
     except:
         print("none")
