@@ -6,6 +6,7 @@ import requests as req
 from bs4 import BeautifulSoup as BS
 import random
 from time import sleep
+from getimg import getimg
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
@@ -44,30 +45,18 @@ async def myBot(message: types.Message):
 
         # -------=img bot=-------
 
-        if "/img " in message.text:
-            reg = message.text.split("/img ")[1]  # get the word after the command
-            url = f"https://www.google.com/search?q={reg}&client=opera&hs=nkI&hl=ru&sxsrf=APq-WBuUWCpyLYYduHWl9vqF9dG_IIvdpg:1649445742756&source=lnms&tbm=isch&sa=X&ved=2ahUKEwizzsqcmIX3AhVM-yoKHcKBCg0Q_AUoAXoECAEQAw&biw=2519&bih=1299&dpr=1"
+        if "/img" in message.text[0:4]:
+            reg = message.text.split("/img ", maxsplit=1)[1]  # get the word after the command
+            print(reg)
+            getimg(reg)
 
-            r = req.get(url)
+            with open('img.jpg', 'rb') as photo:
+                await bot.send_photo(message.chat.id, photo)
 
-            soup = BS(r.content, "html.parser")
-            list1 = []
-
-            for i in soup.select("img", class_="Q4LuWd"):
-                list1.append(i.get("src"))
-
-            randel = list1[random.randrange(1, len(list1))]
-            randel = req.get(randel).content
-
-            with open(f"123.jpg", "wb") as file:
-                file.write(randel)
-
-            hoto = open('123.jpg', 'rb')
-            await bot.send_photo(message.chat.id, hoto)
-
-    except:
-        print("none")
-        return "none"
+    except Exception as ex:
+        await bot.send_message(message.chat.id, ex)
+        print(ex)
+        return ex
 
 
 if __name__ == '__main__':
